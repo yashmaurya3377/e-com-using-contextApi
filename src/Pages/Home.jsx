@@ -46,6 +46,8 @@ const Home = () => {
   
   return (
     <div className=" backdrop-blur-[5px]  grid w-[100%] mx-auto mt-15  gap-4 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1  p-10  ">
+     
+
       {searchProduct.map((ele, i) => (
         <div
           key={ele.id}

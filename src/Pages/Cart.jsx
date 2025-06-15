@@ -144,7 +144,7 @@ const Cart = () => {
                 </div>
               </div>
 
-              <Link to={"/buy"} state={products} className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-medium transition duration-200">
+              <Link to={"/buy"} state={products} className="w-full p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-medium transition duration-200">
                 Proceed to Checkout
               </Link>
             </div>

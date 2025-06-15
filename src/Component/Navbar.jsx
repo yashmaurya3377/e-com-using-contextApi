@@ -5,11 +5,13 @@ import { PiShoppingCartBold } from "react-icons/pi";
 import { FiSearch } from "react-icons/fi";
 import Userdata from "../context/Userdata";
 import Filterdata from "../context/Filterdata";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const cartItem = useContext(Userdata);
   const filterItem = useContext(Filterdata);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [check, setcheck] = useState(false);
 
   let itemnumber = cartItem.database.length;
 
@@ -22,6 +24,16 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  // Get user profile initial
+  const userLoginData = JSON.parse(localStorage.getItem('userLogin')) || [];
+  const latestLogin = userLoginData.length > 0 ? userLoginData[userLoginData.length - 1] : null;
+  const profileInitial = latestLogin ? latestLogin.Email.charAt(0).toUpperCase() : null;
+  const handleLogout=()=>{
+    setcheck(!check)
+    localStorage.removeItem('userLogin')
+    toast.success("logout successfully")
+  }
+
   return (
     <nav className="bg-amber-300 flex flex-wrap items-center px-4 sm:px-6 py-3 justify-between fixed w-full top-0 z-50 shadow-md">
       {/* Logo and Hamburger Menu */}
@@ -32,7 +44,7 @@ const Navbar = () => {
         >
           Apni Dukaan
         </Link>
-        
+
         {/* Mobile menu button */}
         <button
           className="sm:hidden text-gray-800 focus:outline-none"
@@ -42,7 +54,7 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Search Bar - shown on all screens but full width on mobile */}
+      {/* Search Bar */}
       <div className={`relative w-full sm:w-auto sm:flex-1 max-w-xl mx-0 sm:mx-6 mt-3 sm:mt-0 ${isMenuOpen ? "block" : "hidden sm:block"}`}>
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <FiSearch className="text-gray-500" />
@@ -55,7 +67,7 @@ const Navbar = () => {
         />
       </div>
 
-      {/* Navigation Links - hidden on mobile when menu is closed */}
+      {/* Navigation Links */}
       <ul className={`${isMenuOpen ? "flex" : "hidden"} sm:flex flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full sm:w-auto mt-4 sm:mt-0`}>
         <li className="w-full sm:w-auto text-center">
           <Link
@@ -79,18 +91,33 @@ const Navbar = () => {
             </span>
           </Link>
         </li>
-        <li className="w-full sm:w-auto text-center">
-          <Link 
-            to="/account" 
-            className="flex justify-center py-2 sm:py-0"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            <MdAccountCircle
-              size={32}
-              className="text-gray-700 hover:text-blue-600 transition-colors duration-200"
-            />
-          </Link>
-        </li>
+        {!latestLogin && (
+          <li className="w-full sm:w-auto text-center">
+            <Link
+              to="/account"
+              className="flex justify-center py-2 sm:py-0"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <MdAccountCircle
+                size={32}
+                className="text-gray-700 hover:text-blue-600 transition-colors duration-200"
+              />
+            </Link>
+          </li>
+        )}
+        {latestLogin && (
+          <li className="w-full sm:w-auto text-center">
+            <button
+              onClick={handleLogout}
+              className="flex justify-center py-2 sm:py-0"
+              
+            >
+              <div className="w-10 h-10 rounded-full bg-amber-900 text-white flex items-center justify-center text-xl font-bold">
+                {profileInitial}
+              </div>
+            </button>
+          </li>
+        )}
       </ul>
     </nav>
   );
